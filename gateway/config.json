@@ -1,20 +1,31 @@
 {
   "mcp": {
     "servers": {
-      "filesystem": {
-        "command": "npx",
-        "args": [
-          "-y",
-          "@modelcontextprotocol/server-filesystem",
-          "/Users/dan/code"
-        ]
-      },
       "memory": {
         "command": "npx",
         "args": [
           "-y",
           "@modelcontextprotocol/server-memory"
         ]
+      },
+      "linear": {
+        "command": "node",
+        "args": [
+        "./linear-context-server-ts/build/server.js"
+        ],
+        "env": {
+          "LINEAR_API_KEY": "your_key_here"
+        }
+      },
+      "github": {
+        "command": "npx",
+        "args": [
+          "-y",
+          "@modelcontextprotocol/server-github"
+        ],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "your_key_here"
+        }
       }
     }
   }

@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Sequence
+from typing import Sequence, List, Optional, Literal
 
 from langchain_core.messages import AnyMessage
 from langgraph.graph import add_messages
@@ -40,10 +40,7 @@ class InputState:
 
 @dataclass
 class State(InputState):
-    """Represents the complete state of the agent, extending InputState with additional attributes.
-
-    This class can be used to store any information needed throughout the agent's lifecycle.
-    """
+    """Represents the complete state of the agent, extending InputState with additional attributes."""
 
     is_last_step: IsLastStep = field(default=False)
     """
@@ -53,8 +50,16 @@ class State(InputState):
     It is set to 'True' when the step count reaches recursion_limit - 1.
     """
 
-    # Additional attributes can be added here as needed.
-    # Common examples include:
-    # retrieved_documents: List[Document] = field(default_factory=list)
-    # extracted_entities: Dict[str, Any] = field(default_factory=dict)
-    # api_connections: Dict[str, Any] = field(default_factory=dict)
+    current_agent: Literal["orchestrator", "planner", "coder"] = field(
+        default="orchestrator"
+    )
+    """Tracks which agent is currently active in the workflow."""
+
+    story_context: Optional[dict] = field(default=None)
+    """Stores the Linear story context and Git repo info gathered by the orchestrator."""
+    
+    solution_plans: List[dict] = field(default_factory=list)
+    """Stores the technical solution variations created by the planner."""
+    
+    completed_variations: List[dict] = field(default_factory=list)
+    """Tracks which solution variations have been implemented by the coder."""

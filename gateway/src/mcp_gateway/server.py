@@ -25,12 +25,12 @@ logger = logging.getLogger(__name__)
 
 app = FastAPI()
 
-
 @dataclass
 class MCPServerConfig:
     """Configuration for an MCP server."""
     command: str
     args: List[str]
+    env: Dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -101,11 +101,15 @@ class Gateway:
         """Start an MCP server and initialize its client session."""
         try:
             logger.info(f"Starting MCP server: {name}")
-            logger.info(f"Server config: command={config.command}, args={config.args}")
+            logger.info(f"Server config: command={config.command}, args={config.args}, env={config.env}")
             
             # Construct command
             cmd = f"{config.command} {' '.join(config.args)}"
             logger.info(f"Running command: {cmd}")
+            
+            # Get current environment and update with server-specific env vars
+            env = os.environ.copy()
+            env.update(config.env)
             
             # Start the server process in the background
             process = await asyncio.create_subprocess_shell(
@@ -113,6 +117,7 @@ class Gateway:
                 stdin=asyncio.subprocess.PIPE,
                 stdout=asyncio.subprocess.PIPE,
                 stderr=asyncio.subprocess.PIPE,
+                env=env,
                 preexec_fn=os.setsid  # Create new process group
             )
             
