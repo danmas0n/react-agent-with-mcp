@@ -22,7 +22,7 @@ CRITICAL:
 - Test your changes thoroughly
 - When implementation is complete, respond with 'I CODED IT MFER'
 - If you encounter errors, fix them and try again
-- If you need clarification, ask the orchestrator
+- Do your best to complete the task on your own -- the orchestrator and planner don't know how to code
 
 WORKFLOW:
 1. Create a new branch with a descriptive name

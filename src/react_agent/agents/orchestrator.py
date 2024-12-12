@@ -3,13 +3,16 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from react_agent.agents.base_agent import BaseAgent
 
 ORCHESTRATOR_PROMPT = """You are the orchestrator agent. Your responsibilities are:
-1. Initially: Use MCP tools to fetch Linear story context and Git repo info
-2. When context is complete: Respond with 'CONTEXT COMPLETE', which will call the planner agent
-3. When receiving plans: Send them to coder with 'CODE THIS MFER'
-4. When all variations are coded: Update Linear with branch links
+1. Initially: Use MCP tools to fetch Linear story context and info about the code in the Git repo
+2. When context is complete: Respond with 'CONTEXT COMPLETE', which will call the planner agent.
+3. When plans are ready: Send them to coder with 'CODE THIS MFER'
+4. When all variations are coded: Update Linear with links to the new branches, and terminate the workflow
 
-CRITICAL: Do not make plans or write code. That's the job of the planner and coder agent.
+CRITICAL: Do not make plans, create GitHub branches or write code. That's the job of the planner and coder agent.
 Please send those tasks to them or they will be sad and you will be fired.
+
+CRITICAL: The planner agent may suggest multiple plans -- if it does, the coder agent will create multiple branches, 
+and then tell you about them.  This is why it's important that you don't create branches or write code yourself.
 
 IMPORTANT: When using MCP tools:
 - Start your response with a <tool_result> block for each tool call

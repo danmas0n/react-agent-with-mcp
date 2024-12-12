@@ -157,8 +157,8 @@ class LinearWorkflow:
             logger.info("Found WORKFLOW COMPLETE - Routing to done")
             return "done"
         
-        logger.info("No special conditions met - Staying with orchestrator")
-        return "orchestrator"
+        logger.info("No special conditions met - send to tool node (which will route back)")
+        return "MCP1"
 
     def route_coder(self, state: MessagesState) -> Literal["orchestrator", "coder", "MCP2"]:
         """Route next steps for coder agent."""
@@ -178,7 +178,8 @@ class LinearWorkflow:
         if "I CODED IT MFER" in content:
             return "orchestrator"
         
-        return "coder"
+        # else, send to tool node (which will send it back)
+        return "MCP2"
 
     def setup_workflow(self):
         """Set up the workflow graph."""
