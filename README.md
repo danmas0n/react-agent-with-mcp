@@ -44,7 +44,31 @@ pip install -e .
 cd ..
 ```
 
-### 2. Configure MCP Servers
+### 2. Configure Environment Variables
+
+The agent supports multiple LLM providers through environment variables:
+
+```bash
+# LLM Configuration - supports multiple providers:
+LLM_MODEL=provider/model-name
+
+# Supported providers and example models:
+# - Anthropic: anthropic/claude-3-5-sonnet-20240620
+# - OpenAI: openai/gpt-4
+# - OpenRouter: openrouter/openai/gpt-4o-mini
+# - Google: google/gemini-1.5-pro
+
+# API Keys for different providers
+OPENAI_API_KEY=your_openai_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key
+OPENROUTER_API_KEY=your_openrouter_api_key
+GOOGLE_API_KEY=your_google_api_key
+
+# OpenRouter Configuration (if using OpenRouter)
+OPENROUTER_BASE_URL=https://openrouter.ai/api/v1
+```
+
+### 3. Configure MCP Servers
 
 The gateway server is configured through `gateway/config.json`. By default, it starts two MCP servers:
 
@@ -74,7 +98,7 @@ The gateway server is configured through `gateway/config.json`. By default, it s
 
 You can add more servers from the [official MCP servers repository](https://github.com/modelcontextprotocol/servers).
 
-### 3. Start the Gateway Server
+### 4. Start the Gateway Server
 
 ```bash
 cd gateway
@@ -83,7 +107,7 @@ python -m mcp_gateway.server
 
 The server will start on port 8808 by default.
 
-### 4. Configure the Agent
+### 5. Configure the Agent
 
 The agent's connection to the gateway is configured in `langgraph.json`:
 
@@ -100,7 +124,7 @@ The agent's connection to the gateway is configured in `langgraph.json`:
 }
 ```
 
-### 5. Use the Agent
+### 6. Use the Agent
 
 Open the folder in LangGraph Studio! The agent will automatically:
 1. Connect to the gateway server

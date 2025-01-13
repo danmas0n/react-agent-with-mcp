@@ -6,6 +6,7 @@ from typing import Any
 
 from langchain_anthropic import ChatAnthropic
 from langchain_openai import ChatOpenAI
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -54,8 +55,22 @@ def load_chat_model(model_name: str, openrouter_base_url: str | None = None) -> 
             openai_api_base=openrouter_base_url,
             model=model,  # Use just the model part (e.g., "anthropic/claude-3-5-sonnet-20241022")
         )
+    elif provider == "google":
+        logger.info("Using Google Gemini client")
+        api_key = os.getenv("GOOGLE_API_KEY")
+        logger.info(f"Google API key present: {bool(api_key)}")
+        
+        if not api_key:
+            raise ValueError("GOOGLE_API_KEY environment variable is required for Google models")
+            
+        return ChatGoogleGenerativeAI(
+            model=model,  # e.g., "gemini-1.5-pro"
+            google_api_key=api_key,
+            temperature=0,  # Match default behavior of other providers
+            convert_system_message_to_human=True  # Gemini doesn't support system messages natively
+        )
     else:
         raise ValueError(
             f"Unsupported provider: {provider}. "
-            "Must be one of: anthropic, openai, openrouter"
+            "Must be one of: anthropic, openai, openrouter, google"
         )
